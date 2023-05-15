@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-nedBank-1df26155-f6ac-41ef-8cf0-d958cf0a809d</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	  <RestoreFallbackFolders>clear</RestoreFallbackFolders>
+
+  </PropertyGroup>
+
+<ItemGroup>
+	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
+	<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.10" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.10" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.11" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+	<PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+	<PackageReference Include="PagedList.Core.Mvc" Version="3.0.0" />
+	<PackageReference Include="PasswordGenerator" Version="2.1.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
+	</ItemGroup>
+
+<ItemGroup>
+  <Content Update="Views\Home\Index.cshtml">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+  <Content Update="Views\Home\Logins.cshtml">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+  <Content Update="Views\Shared\_Layout.cshtml">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+  <Content Update="Views\Shared\_LayoutAuth.cshtml">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+  <Content Update="Views\Shared\_LayoutMain.cshtml">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+  <Content Update="Views\_ViewImports.cshtml">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+  <Content Update="Views\_ViewStart.cshtml">
+    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+  </Content>
+</ItemGroup>
+
+<ItemGroup>
+  <UpToDateCheckInput Remove="Views\Auth\Login.cshtml" />
+</ItemGroup>
+
+<ItemGroup>
+  <_ContentIncludedByDefault Remove="Views\Auth\Login.cshtml" />
+  <_ContentIncludedByDefault Remove="Views\Auth\Register.cshtml" />
+</ItemGroup>
+
+<ItemGroup>
+  <UpToDateCheckInput Remove="Views\Auth\Register.cshtml" />
+</ItemGroup>
+
+<Import Project="..\SharedProject\SharedProject.projitems" Label="Shared" />
+
+</Project>

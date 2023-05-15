@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAzNm6dcBQ50WaUiNVNT+OzAAAAAACAAAAAAAQZgAAAAEAACAAAACE1bEIFzXei1kBJL7MEasKYfKpFRKipSjbFt2gMsVUIgAAAAAOgAAAAAIAACAAAABmJQtYEFPW/HjYeJDnjGnsj5ff/XqWTbp3j1b6g/aVSVAAAAAQg9bDj0jsZ7+87eX0+fiJ+XyZxtwg0Haeqt6S4DiqCVym1OHEiLrjxMOlhzrJ7dJb+CD4Tf76SNg7Q1Q/hOrnLYXrCg0yMCVqRV4InX6PckAAAACOEmTOHXpW1OtzwjqNgWwheSrfJIAvpQJ1cmMi8Z2BA4xaOnvVyRI13Ov8ods7zseLUX25VpyeKaxt1lC+q9LT</EncryptedPassword>
+    <History>True|2023-04-01T06:05:20.0481719Z;False|2023-03-31T21:52:50.1025546+02:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="db">
+      <Value>server=localhost%3buid=root%3bpwd=abc123!%3bdatabase=wb%3bdefault command timeout=120%3bSslMode=none</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
