@@ -8,3 +8,6 @@ dotnet publish Fnb --configuration Release --output "C:\\inetpub\\wwwroot\\Amade
 ::on windows run this in iis
 ::dotnet "C:\\inetpub\\wwwroot\\WiseOwlVisionAndComplianceAdmin\\Admin.dll" --urls http://0.0.0.0:1003
 ::dotnet "C:\\inetpub\\wwwroot\\WiseOwlVisionAndComplianceApi\\Api.dll" --urls http://0.0.0.0:1004
+
+
+pause
