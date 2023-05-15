@@ -20,7 +20,6 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.Extensions.Configuration;
 using SharedModels;
 using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace AAL_TUTOR5.Controllers
 {

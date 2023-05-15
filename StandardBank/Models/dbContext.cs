@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
-#nullable disable
 
 namespace SharedModels
 {
@@ -17,316 +16,123 @@ namespace SharedModels
         {
         }
 
-        public virtual DbSet<Aspnetrole> Aspnetroles { get; set; }
-        public virtual DbSet<Aspnetroleclaim> Aspnetroleclaims { get; set; }
-        public virtual DbSet<Aspnetuser> Aspnetusers { get; set; }
-        public virtual DbSet<Aspnetuserclaim> Aspnetuserclaims { get; set; }
-        public virtual DbSet<Aspnetuserlogin> Aspnetuserlogins { get; set; }
-        public virtual DbSet<Aspnetuserrole> Aspnetuserroles { get; set; }
-        public virtual DbSet<Aspnetusertoken> Aspnetusertokens { get; set; }
-        public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
-        public virtual DbSet<Login> Logins { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
+        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
+        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
+        public virtual DbSet<Login> Logins { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql(Globals.AppSettings.db_connection_string, Globals.AppSettings.db_version);
-                //optionsBuilder.UseMySql("server=localhost;uid=root;pwd=abc123!;database=standard_bank;", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.30-mysql"));
+                optionsBuilder.UseNpgsql("Host=localhost;Database=namibia_banks_standard_bank;Username=postgres;Password=abc123");
             }
+            optionsBuilder.EnableDetailedErrors(true);
+            optionsBuilder.EnableSensitiveDataLogging(true);
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasCharSet("utf8mb4")
-                .UseCollation("utf8mb4_0900_ai_ci");
+            modelBuilder.HasPostgresExtension("uuid-ossp");
 
-            modelBuilder.Entity<Aspnetrole>(entity =>
+            modelBuilder.Entity<AspNetRole>(entity =>
             {
-                entity.ToTable("aspnetroles");
-
                 entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                entity.Property(e => e.Name).HasMaxLength(256);
 
-                entity.Property(e => e.ConcurrencyStamp)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(256)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.NormalizedName)
-                    .HasMaxLength(256)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                entity.Property(e => e.NormalizedName).HasMaxLength(256);
             });
 
-            modelBuilder.Entity<Aspnetroleclaim>(entity =>
+            modelBuilder.Entity<AspNetRoleClaim>(entity =>
             {
-                entity.ToTable("aspnetroleclaims");
-
                 entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.ClaimType)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.ClaimValue)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.RoleId)
-                    .IsRequired()
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
                 entity.HasOne(d => d.Role)
-                    .WithMany(p => p.Aspnetroleclaims)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_AspNetRoleClaims_AspNetRoles_RoleId");
+                    .WithMany(p => p.AspNetRoleClaims)
+                    .HasForeignKey(d => d.RoleId);
             });
 
-            modelBuilder.Entity<Aspnetuser>(entity =>
+            modelBuilder.Entity<AspNetUser>(entity =>
             {
-                entity.ToTable("aspnetusers");
-
                 entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
                 entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                entity.Property(e => e.Email).HasMaxLength(256);
 
-                entity.Property(e => e.ConcurrencyStamp)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
-                entity.Property(e => e.Email)
-                    .HasMaxLength(256)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
-                entity.Property(e => e.EmailConfirmed).HasColumnType("bit(1)");
+                entity.Property(e => e.UserName).HasMaxLength(256);
 
-                entity.Property(e => e.LockoutEnabled).HasColumnType("bit(1)");
+                entity.HasMany(d => d.Roles)
+                    .WithMany(p => p.Users)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "AspNetUserRole",
+                        l => l.HasOne<AspNetRole>().WithMany().HasForeignKey("RoleId"),
+                        r => r.HasOne<AspNetUser>().WithMany().HasForeignKey("UserId"),
+                        j =>
+                        {
+                            j.HasKey("UserId", "RoleId");
 
-                entity.Property(e => e.LockoutEnd).HasColumnType("datetime");
+                            j.ToTable("AspNetUserRoles");
 
-                entity.Property(e => e.NormalizedEmail)
-                    .HasMaxLength(256)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.NormalizedUserName)
-                    .HasMaxLength(256)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.PasswordHash)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.PhoneNumber)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.PhoneNumberConfirmed).HasColumnType("bit(1)");
-
-                entity.Property(e => e.SecurityStamp)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.TwoFactorEnabled).HasColumnType("bit(1)");
-
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(256)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                            j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
+                        });
             });
 
-            modelBuilder.Entity<Aspnetuserclaim>(entity =>
+            modelBuilder.Entity<AspNetUserClaim>(entity =>
             {
-                entity.ToTable("aspnetuserclaims");
-
                 entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.ClaimType)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.ClaimValue)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.Aspnetuserclaims)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_AspNetUserClaims_AspNetUsers_UserId");
+                    .WithMany(p => p.AspNetUserClaims)
+                    .HasForeignKey(d => d.UserId);
             });
 
-            modelBuilder.Entity<Aspnetuserlogin>(entity =>
+            modelBuilder.Entity<AspNetUserLogin>(entity =>
             {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                entity.ToTable("aspnetuserlogins");
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
 
                 entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
 
-                entity.Property(e => e.LoginProvider)
-                    .HasMaxLength(128)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
-                entity.Property(e => e.ProviderKey)
-                    .HasMaxLength(128)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.ProviderDisplayName)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
+                entity.Property(e => e.ProviderKey).HasMaxLength(128);
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.Aspnetuserlogins)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_AspNetUserLogins_AspNetUsers_UserId");
+                    .WithMany(p => p.AspNetUserLogins)
+                    .HasForeignKey(d => d.UserId);
             });
 
-            modelBuilder.Entity<Aspnetuserrole>(entity =>
+            modelBuilder.Entity<AspNetUserToken>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
 
-                entity.ToTable("aspnetuserroles");
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
-                entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
-
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.RoleId)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.Aspnetuserroles)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId");
+                entity.Property(e => e.Name).HasMaxLength(128);
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.Aspnetuserroles)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_AspNetUserRoles_AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<Aspnetusertoken>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0, 0 });
-
-                entity.ToTable("aspnetusertokens");
-
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.LoginProvider)
-                    .HasMaxLength(128)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(128)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.Value)
-                    .HasMaxLength(450)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Aspnetusertokens)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_AspNetUserTokens_AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<Efmigrationshistory>(entity =>
-            {
-                entity.HasKey(e => e.MigrationId)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("__efmigrationshistory");
-
-                entity.Property(e => e.MigrationId).HasMaxLength(150);
-
-                entity.Property(e => e.ProductVersion)
-                    .IsRequired()
-                    .HasMaxLength(32);
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<Login>(entity =>
             {
-                entity.ToTable("login");
+                entity.ToTable("Login");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasDefaultValueSql("(uuid_generate_v4())::text");
 
-                entity.Property(e => e.Email)
-                    .HasColumnType("text")
-                    .HasColumnName("email");
-
-                entity.Property(e => e.Password)
-                    .HasColumnType("text")
-                    .HasColumnName("password");
-
-                entity.Property(e => e.Token)
-                    .HasColumnType("text")
-                    .HasColumnName("token");
+                entity.Property(e => e.Token).HasColumnName("token");
             });
 
             OnModelCreatingPartial(modelBuilder);

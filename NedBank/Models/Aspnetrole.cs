@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace SharedModels
 {
-    public partial class Aspnetrole
+    public partial class AspNetRole
     {
-        public Aspnetrole()
+        public AspNetRole()
         {
-            Aspnetroleclaims = new HashSet<Aspnetroleclaim>();
-            Aspnetuserroles = new HashSet<Aspnetuserrole>();
+            AspNetRoleClaims = new HashSet<AspNetRoleClaim>();
+            Users = new HashSet<AspNetUser>();
         }
 
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string NormalizedName { get; set; }
-        public string ConcurrencyStamp { get; set; }
+        public string Id { get; set; } = null!;
+        public string? Name { get; set; }
+        public string? NormalizedName { get; set; }
+        public string? ConcurrencyStamp { get; set; }
 
-        public virtual ICollection<Aspnetroleclaim> Aspnetroleclaims { get; set; }
-        public virtual ICollection<Aspnetuserrole> Aspnetuserroles { get; set; }
+        public virtual ICollection<AspNetRoleClaim> AspNetRoleClaims { get; set; }
+
+        public virtual ICollection<AspNetUser> Users { get; set; }
     }
 }

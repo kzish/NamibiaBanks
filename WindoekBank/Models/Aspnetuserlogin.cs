@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace SharedModels
 {
-    public partial class Aspnetuserlogin
+    public partial class AspNetUserLogin
     {
-        public string LoginProvider { get; set; }
-        public string ProviderKey { get; set; }
-        public string ProviderDisplayName { get; set; }
-        public string UserId { get; set; }
+        public string LoginProvider { get; set; } = null!;
+        public string ProviderKey { get; set; } = null!;
+        public string? ProviderDisplayName { get; set; }
+        public string UserId { get; set; } = null!;
 
-        public virtual Aspnetuser User { get; set; }
+        public virtual AspNetUser User { get; set; } = null!;
     }
 }

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace SharedModels
 {
-    public partial class Aspnetuserclaim
+    public partial class AspNetUserClaim
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
-        public string ClaimType { get; set; }
-        public string ClaimValue { get; set; }
+        public string UserId { get; set; } = null!;
+        public string? ClaimType { get; set; }
+        public string? ClaimValue { get; set; }
 
-        public virtual Aspnetuser User { get; set; }
+        public virtual AspNetUser User { get; set; } = null!;
     }
 }

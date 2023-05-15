@@ -1,4 +1,3 @@
-using ApiLite.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -6,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SharedModels;
-using SharedProject.Globals;
 using System.Text;
+using wb6.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,8 +47,6 @@ builder.Services.AddAuthorization();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("db");
-
-Globals.Common.Init(builder);
 
 builder.Services.AddDbContext<dbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -118,10 +115,5 @@ using (var serviceScope = app.Services.GetService<IServiceScopeFactory>()!.Creat
     //run migrations
     await using var db = serviceScope.ServiceProvider.GetRequiredService<dbContext>();
     await db.Database.MigrateAsync();
-    //init App
-    var signInManager = serviceScope.ServiceProvider.GetService<SignInManager<IdentityUser>>()!;
-    var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>()!;
-    var userManager = serviceScope.ServiceProvider.GetService<UserManager<IdentityUser>>()!;
-    AppSetup.Init(signInManager, roleManager, userManager);
 }
 app.Run();
