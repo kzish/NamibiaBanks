@@ -8,8 +8,7 @@ namespace WindoekBank.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
-        protected override void Up(MigrationBuilder migrationBuilder) { }
-        protected void _Up(MigrationBuilder migrationBuilder)
+        protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
